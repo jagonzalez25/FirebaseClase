@@ -1,5 +1,5 @@
 import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider , signInWithPopup , 
-            signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+            signInWithEmailAndPassword, TwitterAuthProvider  } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
 
 import { verAutenticacion } from "./firebase.js";
 
@@ -118,6 +118,20 @@ window.authGoogle = function authGoogle() {
         });
 }
 
+window.authTwitter = function authTwitter() {
 
+    const provider = new TwitterAuthProvider();
+    const auth = getAuth();
+
+    signInWithPopup(auth, provider)
+        .then((result) => {
+
+        }).catch((error) => {
+            const errorMessage = error.message;
+            document.getElementById("alertErrorLogueo").style.display = "block";
+            document.getElementById("alertErrorLogueo").innerHTML = errorMessage;     
+   
+        });
+}
 
 
