@@ -1,4 +1,5 @@
-import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider , signInWithPopup } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider , signInWithPopup , 
+            signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
 
 import { verAutenticacion } from "./firebase.js";
 
@@ -63,7 +64,28 @@ window.crearUsuario = function crearUsuario() {
 
 }
 
+window.iniciarSesion = function iniciarSesion() {
 
+    const email =  document.getElementById("txtcorreoIngresar").value;
+    const password = document.getElementById("txtcontraIngresar").value;
+
+    if(email == "" || password == "") {
+        document.getElementById("alertErrorLogueo").style.display = "block";
+        document.getElementById("alertErrorLogueo").innerHTML = "Email y/o contraseña son obligatorios";
+        return false;
+    } else {
+        const auth = getAuth();
+        signInWithEmailAndPassword(auth, email, password).then((userCredential) =>{
+
+            //console.log(userCredential);
+
+        }).catch((error) =>{
+            document.getElementById("alertErrorLogueo").style.display = "block";
+            document.getElementById("alertErrorLogueo").innerHTML = error.message;
+        });
+    }
+
+}
 
 window.authGoogle = function authGoogle() {
 
@@ -79,8 +101,8 @@ window.authGoogle = function authGoogle() {
            //console.log(credential);
             //console.log(token);
 
-            const user = result.user;
-            console.log(user);
+            //const user = result.user;
+            //console.log(user);
             
 
             // ...

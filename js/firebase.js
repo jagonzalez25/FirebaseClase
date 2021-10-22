@@ -38,6 +38,7 @@ export function verAutenticacion(){
           console.log("Inicio sesion");  
           console.log(user);*/
 
+          console.log(user);
           if(document.getElementById("divRedes"))
             document.getElementById("divRedes").style.visibility = "hidden";
 
