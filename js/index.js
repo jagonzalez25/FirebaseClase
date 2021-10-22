@@ -1,5 +1,10 @@
 import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider , signInWithPopup } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
 
+import { verAutenticacion } from "./firebase.js";
+
+window.onload = function(){
+    verAutenticacion();
+}
 
 window.abrirMoldal = function abrirMoldal() {
     document.getElementById("alertaErrorRegistro").style.display = "none";
@@ -58,6 +63,8 @@ window.crearUsuario = function crearUsuario() {
 
 }
 
+
+
 window.authGoogle = function authGoogle() {
 
     const provider = new GoogleAuthProvider();
@@ -66,15 +73,15 @@ window.authGoogle = function authGoogle() {
     signInWithPopup(auth, provider)
         .then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
+            //const credential = GoogleAuthProvider.credentialFromResult(result);
+            //const token = credential.accessToken;
             // The signed-in user info.
-            const user = result.user;
+           //console.log(credential);
+            //console.log(token);
 
-            console.log(credential);
-            console.log(token);
+            const user = result.user;
             console.log(user);
-            alert("Iniciado correctamente desde Google");
+            
 
             // ...
         }).catch((error) => {

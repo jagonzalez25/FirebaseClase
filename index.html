@@ -13,7 +13,7 @@
 
 <body>
 
-    <div class="bg-dark">
+    <div class="bg-dark" id="barraMenuId">
         <div class="d-flex justify-content-center row ">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark col-md-9">
 
@@ -25,27 +25,19 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active" id="item1">
-                            <a class="nav-link" href="/1.html">Menu 1</a>
+                        <li class="nav-item" id="itemRestaurante">
+                            <a class="nav-link" href="/restaurante.html">Restaurantes</a>
                         </li>
-                        <li class="nav-item" id="item2">
-                            <a class="nav-link" href="/2.html">Menu 2</a>
+                        <li class="nav-item" id="itemUsuario">
+                            <a class="nav-link" href="/usuarios.html">Usuarios</a>
                         </li>
 
-                        <li class="nav-item" id="item3">
-                            <a class="nav-link " href="/3.html" tabindex="-1" aria-disabled="true">
-                                Menu 3</a>
-                        </li>
-                        <li class="nav-item" id="item4">
-                            <a class="nav-link " href="/4.html" tabindex="-1" aria-disabled="true">
-                                Menu 4</a>
-                        </li>
-                        <li class="nav-item" id="item5">
-                            <a class="nav-link " href="/5.html" tabindex="-1" aria-disabled="true">
-                                Menu 5</a>
+                        <li class="nav-item" id="itemComentario">
+                            <a class="nav-link " href="/comentario.html" tabindex="-1" aria-disabled="true">
+                                Comentarios</a>
                         </li>
                         <li class="nav-item" id="itemSalir" style="cursor: pointer;">
-                            <a class="nav-link " tabindex="-1" aria-disabled="true">
+                            <a class="nav-link " tabindex="-1" aria-disabled="true" onclick="salir()">
                                 Salir</a>
                         </li>
                     </ul>
