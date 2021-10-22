@@ -1,5 +1,5 @@
 import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider , signInWithPopup , 
-            signInWithEmailAndPassword, TwitterAuthProvider  } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+            signInWithEmailAndPassword, TwitterAuthProvider, GithubAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
 
 import { verAutenticacion } from "./firebase.js";
 
@@ -121,6 +121,38 @@ window.authGoogle = function authGoogle() {
 window.authTwitter = function authTwitter() {
 
     const provider = new TwitterAuthProvider();
+    const auth = getAuth();
+
+    signInWithPopup(auth, provider)
+        .then((result) => {
+
+        }).catch((error) => {
+            const errorMessage = error.message;
+            document.getElementById("alertErrorLogueo").style.display = "block";
+            document.getElementById("alertErrorLogueo").innerHTML = errorMessage;     
+   
+        });
+}
+
+window.authGithub = function authGithub() {
+
+    const provider = new GithubAuthProvider();
+    const auth = getAuth();
+
+    signInWithPopup(auth, provider)
+        .then((result) => {
+
+        }).catch((error) => {
+            const errorMessage = error.message;
+            document.getElementById("alertErrorLogueo").style.display = "block";
+            document.getElementById("alertErrorLogueo").innerHTML = errorMessage;     
+   
+        });
+}
+
+window.authFacebook = function authFacebook() {
+
+    const provider = new FacebookAuthProvider();
     const auth = getAuth();
 
     signInWithPopup(auth, provider)

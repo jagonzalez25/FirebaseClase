@@ -55,6 +55,8 @@ export function verAutenticacion(){
               document.getElementById("lblNombreUsuario").innerHTML = user.displayName;
           else if (user.email != null)    
               document.getElementById("lblNombreUsuario").innerHTML = user.email;
+          else if (user.reloadUserInfo.screenName != null)    
+              document.getElementById("lblNombreUsuario").innerHTML = user.reloadUserInfo.screenName;              
           else
               document.getElementById("lblNombreUsuario").innerHTML = ""; 
 
