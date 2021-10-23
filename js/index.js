@@ -88,12 +88,30 @@ window.iniciarSesion = function iniciarSesion() {
 }
 
 window.authGoogle = function authGoogle() {
-
     const provider = new GoogleAuthProvider();
-    const auth = getAuth();
+    authGeneric(provider, "Twitter");
+}
 
+window.authTwitter = function authTwitter() {
+    const provider = new TwitterAuthProvider();
+    authGeneric(provider, "Twitter");
+}
+
+window.authGithub = function authGithub() {
+    const provider = new GithubAuthProvider();
+    authGeneric(provider, "GitHub");
+}
+
+window.authFacebook = function authFacebook() {
+    const provider = new FacebookAuthProvider();
+    authGeneric(provider, "Facebook");
+}
+
+function authGeneric(provider, name) {
+    const auth = getAuth();
     signInWithPopup(auth, provider)
         .then((result) => {
+
             // This gives you a Google Access Token. You can use it to access the Google API.
             //const credential = GoogleAuthProvider.credentialFromResult(result);
             //const token = credential.accessToken;
@@ -103,67 +121,14 @@ window.authGoogle = function authGoogle() {
 
             //const user = result.user;
             //console.log(user);
-            
 
-            // ...
         }).catch((error) => {
             //const errorCode = error.code;
             //const email = error.email;
-            const errorMessage = error.message;
-            document.getElementById("alertErrorLogueo").style.display = "block";
-            document.getElementById("alertErrorLogueo").innerHTML = errorMessage;     
-            // The AuthCredential type that was used.
-            //const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
-        });
-}
 
-window.authTwitter = function authTwitter() {
-
-    const provider = new TwitterAuthProvider();
-    const auth = getAuth();
-
-    signInWithPopup(auth, provider)
-        .then((result) => {
-
-        }).catch((error) => {
             const errorMessage = error.message;
             document.getElementById("alertErrorLogueo").style.display = "block";
             document.getElementById("alertErrorLogueo").innerHTML = errorMessage;     
    
         });
 }
-
-window.authGithub = function authGithub() {
-
-    const provider = new GithubAuthProvider();
-    const auth = getAuth();
-
-    signInWithPopup(auth, provider)
-        .then((result) => {
-
-        }).catch((error) => {
-            const errorMessage = error.message;
-            document.getElementById("alertErrorLogueo").style.display = "block";
-            document.getElementById("alertErrorLogueo").innerHTML = errorMessage;     
-   
-        });
-}
-
-window.authFacebook = function authFacebook() {
-
-    const provider = new FacebookAuthProvider();
-    const auth = getAuth();
-
-    signInWithPopup(auth, provider)
-        .then((result) => {
-
-        }).catch((error) => {
-            const errorMessage = error.message;
-            document.getElementById("alertErrorLogueo").style.display = "block";
-            document.getElementById("alertErrorLogueo").innerHTML = errorMessage;     
-   
-        });
-}
-
-
