@@ -1,9 +1,18 @@
-import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider , signInWithPopup , 
-            signInWithEmailAndPassword, TwitterAuthProvider, GithubAuthProvider, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+import {
+    getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup,
+    signInWithEmailAndPassword, TwitterAuthProvider, GithubAuthProvider, FacebookAuthProvider
+} from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
+
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-firestore.js";
+import { getStorage, uploadBytesResumable, getDownloadURL, ref } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-storage.js";
 
 import { verAutenticacion } from "./firebase.js";
 
-window.onload = function(){
+const db = getFirestore();
+const storage = getStorage();
+var usarActual;
+
+window.onload = function () {
     verAutenticacion();
 }
 
@@ -66,20 +75,20 @@ window.crearUsuario = function crearUsuario() {
 
 window.iniciarSesion = function iniciarSesion() {
 
-    const email =  document.getElementById("txtcorreoIngresar").value;
+    const email = document.getElementById("txtcorreoIngresar").value;
     const password = document.getElementById("txtcontraIngresar").value;
 
-    if(email == "" || password == "") {
+    if (email == "" || password == "") {
         document.getElementById("alertErrorLogueo").style.display = "block";
         document.getElementById("alertErrorLogueo").innerHTML = "Email y/o contraseña son obligatorios";
         return false;
     } else {
         const auth = getAuth();
-        signInWithEmailAndPassword(auth, email, password).then((userCredential) =>{
+        signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
 
-            //console.log(userCredential);
+            actualizarPerfil(userCredential.user, "EmailAndPassword");
 
-        }).catch((error) =>{
+        }).catch((error) => {
             document.getElementById("alertErrorLogueo").style.display = "block";
             document.getElementById("alertErrorLogueo").innerHTML = error.message;
         });
@@ -89,7 +98,7 @@ window.iniciarSesion = function iniciarSesion() {
 
 window.authGoogle = function authGoogle() {
     const provider = new GoogleAuthProvider();
-    authGeneric(provider, "Twitter");
+    authGeneric(provider, "Google");
 }
 
 window.authTwitter = function authTwitter() {
@@ -107,28 +116,110 @@ window.authFacebook = function authFacebook() {
     authGeneric(provider, "Facebook");
 }
 
-function authGeneric(provider, name) {
+function authGeneric(provider, providerName) {
     const auth = getAuth();
     signInWithPopup(auth, provider)
         .then((result) => {
-
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            //const credential = GoogleAuthProvider.credentialFromResult(result);
-            //const token = credential.accessToken;
-            // The signed-in user info.
-           //console.log(credential);
-            //console.log(token);
-
-            //const user = result.user;
-            //console.log(user);
-
+            actualizarPerfil(result.user, providerName);
         }).catch((error) => {
             //const errorCode = error.code;
             //const email = error.email;
-
             const errorMessage = error.message;
             document.getElementById("alertErrorLogueo").style.display = "block";
-            document.getElementById("alertErrorLogueo").innerHTML = errorMessage;     
-   
+            document.getElementById("alertErrorLogueo").innerHTML = errorMessage;
         });
+}
+
+
+function limpiarModalUpdate() {
+    document.getElementById("alertaActulizacionRegistro").style.display = "none";
+    document.getElementById("alertaActulizacionRegistro").innerHTML = "";
+    document.getElementById("progressUploadPhoto").style.visibility = "hidden";
+
+    document.getElementById("txtDisplayNameUpd").value = "";
+    document.getElementById("txtnombre").value = "";
+    document.getElementById("txtapellido").value = "";
+    document.getElementById("txtemail").value = "";
+    document.getElementById("txttelefono").value = "";
+    document.getElementById("txtprovider").value = "";
+    document.getElementById("imgFoto").src = null;
+}
+
+function actualizarPerfil(user, providerName) {
+
+    const docRef = doc(db, "usuario", user.uid);
+    getDoc(docRef).then(docSnap => {
+        if (docSnap.exists()) {
+            //console.log("Document data:", docSnap.data());
+        } else {
+            usarActual = user;
+            limpiarModalUpdate();
+
+            document.getElementById("txtDisplayNameUpd").value = user.displayName != null ? user.displayName : "";
+            document.getElementById("txtemail").value = user.email != null ? user.email : "";
+            document.getElementById("txttelefono").value = user.phoneNumber != null ? user.phoneNumber : "";
+            document.getElementById("imgFoto").src = user.photoURL != null ? user.photoURL : "asset/img/nouser.jpg";
+            //document.getElementById("txtprovider").value = providerName;
+            document.getElementById("txtprovider").value = user.reloadUserInfo.providerUserInfo[0].providerId;
+
+            if (providerName === "google") {
+                document.getElementById("txtnombre").value = user.displayName != null ? user.displayName : "";
+            } else if (providerName === "EmailAndPassword") {
+                document.getElementById("txtnombre").value = "";
+            } else if (providerName === "Twitter") {
+                document.getElementById("txtemail").removeAttribute('readonly');
+                document.getElementById("txtnombre").value = "";
+            } else if (providerName === "GitHub") {
+                document.getElementById("txtnombre").value = "";
+            }
+
+            $("#exampleModalUpdate").modal('show');
+
+        }
+    }).catch((error) => {
+        document.getElementById("alertErrorLogueo").style.display = "block";
+        document.getElementById("alertErrorLogueo").innerHTML = error.message;
+    });
+}
+
+
+window.cambiarFoto = function cambiarFoto(archivo) {
+
+    const file = archivo.files[0];
+    const reader = new FileReader();
+    reader.onloadend = function () {
+        document.getElementById("progressUploadPhoto").style.visibility = "visible";
+
+        document.getElementById("imgFoto").src = reader.result;
+        const imageRef = ref(storage, 'fotoPerfil/' + usarActual.uid);
+        const uploadTask = uploadBytesResumable(imageRef, file);
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                $('.progress-bar').css('width', progress + '%').attr('aria-valuenow', progress);
+            },
+            (error) => {
+                document.getElementById("progressUploadPhoto").style.visibility = "hidden";
+                $('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
+                document.getElementById("alertaActulizacionRegistro").style.display = "block";
+                document.getElementById("alertaActulizacionRegistro").innerHTML = error.message;
+            },
+            () => {
+                document.getElementById("progressUploadPhoto").style.visibility = "hidden";
+                $('.progress-bar').css('width', '0%').attr('aria-valuenow', 0);
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                });
+            }
+        );
+
+    }
+    reader.readAsDataURL(file);
+}
+
+window.editarPerfil = function editarPerfil() {
+
+
+
 }
