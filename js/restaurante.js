@@ -4,6 +4,7 @@ import { verAutenticacion } from "./firebase.js";
 
 const db = getFirestore();
 const storage = getStorage();
+var operacion;
 
 window.onload = function () {
     verAutenticacion();
@@ -36,7 +37,6 @@ function cargarRestaurantes(){
         querySnapshot.forEach(rpta => {
             //console.log(rpta.id, " => ", rpta.data());
             const fila=rpta.data();
-            console.log(fila.nombre);
             contenido+="<tr>";
             contenido+="<td>"+rpta.id+"</td>";
             contenido+="<td>"+fila.nombre+"</td>";
@@ -71,4 +71,54 @@ function calularRating(rating){
     }
     contenido += "</div>";
     return contenido;
+}
+
+window.abrirModal = function abrirModal(opc) {
+    limpiarDatos();
+    if(opc == 0) {
+        operacion = 1;
+        document.getElementById("lblTitulo").innerHTML = "Agregar restaurante";
+    } else {
+        operacion = 2;
+        document.getElementById("lblTitulo").innerHTML = "Editar restaurante";
+    }
+
+}
+
+function limpiarDatos() {
+    document.getElementById("txtnombre").value = "";
+    document.getElementById("txtdireccion").value = "";
+    document.getElementById("imgFoto").src = 'asset/img/nouser.jpg';
+    document.getElementById("iframePreview").src = "";
+
+    document.getElementById("alertaErrorCrearRestaurante").style.display = "none";
+    document.getElementById("alertaErrorCrearRestaurante").innerHTML = "";
+}
+
+window.subirImage = function subirImage(e) {
+    const file = e.files[0];
+    let reader = new FileReader();
+    reader.onloadend= function() {
+        document.getElementById("imgFoto").src = reader.result;
+    }
+    reader.readAsDataURL(file);
+}
+
+window.subirArchivo = function subirArchivo(e) {
+    const file = e.files[0];
+    let reader = new FileReader();
+    reader.onloadend= function() {
+        document.getElementById("iframePreview").src = reader.result;
+    }
+    reader.readAsDataURL(file);
+}
+
+window.descargarArchivo = function descargarArchivo() {
+    const linkSource = document.getElementById("iframePreview").src;
+    const downloadLink = document.createElement("a");
+    const filename = "menuSoprte.pdf";
+    downloadLink.href= linkSource;
+    downloadLink.download = filename;
+    downloadLink.target = "_black";
+    downloadLink.click();
 }
