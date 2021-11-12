@@ -8,8 +8,9 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./css/restaurante.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="./css/restaurante.css">
 </head>
 
 <body>
@@ -27,7 +28,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item" id="itemRestaurante">
-                            <a class="nav-link active" href="/restaurante.html">Restaurantes</a>
+                            <a class="nav-link" href="/restaurante.html">Restaurantes</a>
                         </li>
                         <li class="nav-item" id="itemUsuario">
                             <a class="nav-link" href="/usuarios.html">Usuarios</a>
@@ -38,12 +39,12 @@
                                 Comentarios</a>
                         </li>
 
-                        
+
                         <li class="nav-item" id="itemVerComentario">
                             <a class="nav-link " href="/verComentarios.html" tabindex="-1" aria-disabled="true">
                                 Ver Comentarios</a>
                         </li>
-                        
+
                         <li class="nav-item" id="itemSalir" style="cursor: pointer;">
                             <a class="nav-link " tabindex="-1" aria-disabled="true" onclick="salir()">
                                 Salir</a>
@@ -63,51 +64,9 @@
     </div>
 
 
-    <br>
-    <input type="button" value="Nuevo Restante" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                    onclick="abrirModal(0)" />
-
     <div id="divRestaurante">
 
-    </div>
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="lblTitulo"></h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="form-group">
-                <label>Nombre:</label>
-                <input type="text" id="txtnombre" class="form-control"/>
-                <label>Direccion:</label>
-                <input type="text" id="txtdireccion" class="form-control"/>
-                <label>Foto</label>
-                <img id="imgFoto" width="200" height="200" class="d-block" style="border:1px" src="asset/img/nouser.jpg"/>
-                <input type="file" id="fileImage" accept="image/*"  onchange="subirImage(this)"  />
-                <label class="d-block">Subir Archivo en PDF</label>
-                <iframe id="iframePreview" src="" width="200" height="200" ></iframe>
-                <input  type="file" id="file" accept="application/pdf"  onchange="subirArchivo(this)"  />
-                <input type="button" id="btnDescargar" class="btn btn-primary" onclick="descargarArchivo()" value="Descargar"   />
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" id="btnCancelar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-              <button type="button" onclick="operar()" class="btn btn-primary">Guardar</button>
-            </div>
-      
-            <div class="alert alert-danger" id="alertaErrorCrearRestaurante" role="alert" style="display: none;">
-              
-            </div>
-      
-          </div>
-        </div>
-      </div>      
-
+     </div>   
 
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -122,7 +81,7 @@
 
 
     <script type="module" src="/js/firebase.js"></script>
-    <script type="module" src="/js/restaurante.js"></script>
+    <script type="module" src="/js/verComentarios.js"></script>
 </body>
 
 </html>

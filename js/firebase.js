@@ -27,6 +27,7 @@ window.salir = function salir() {
           alert("Se produce error al cerrar la sesion");
           console.log(err);
       });
+      
 }
 
 
